@@ -1,1 +1,14 @@
-<p>product works!</p>
+<div class="producto">
+  <!-- <img class="img-producto" [src]="product.image" alt="" width="200"> -->
+  <app-img *ngIf="product.images && product.images.length > 0 else elsetemplate" [img]="product.images[0]"></app-img>
+  <ng-template #elsetemplate>
+    <p>[app-product]: images array is empty</p>
+    <app-img [img]="product.image" alt="image"></app-img>
+  </ng-template>
+
+  <p class="nombre-producto text-center">Nombre: {{product.title | slice:0:12 }}</p> <!-- product.title | slice:0:12 | vowels2num -->
+  <h2 class="precio-producto text-center">Precio: {{product.price | currency:'COP'}}</h2> <!-- currency es un PIPE de angular-->
+
+  <button class="boton-producto" (click)="addProduct()" appHighlight>Agregar al carrito</button>
+  <button class="boton-detail" (click)="showDetail()">Ver detalle</button>
+</div>

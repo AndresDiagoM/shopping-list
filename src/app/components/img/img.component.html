@@ -1,0 +1,7 @@
+<!-- <p>Variable: {{ valor }}</p> -->
+
+<img *ngIf="img else elsetemplate" [src]="img" (load)="imgLoaded()" (error)="imgError()" alt="image">
+<ng-template #elsetemplate>
+  <p>[app-img]: img is empty</p>
+  <img [src]="imgDefault" alt="image" width="200">
+</ng-template>

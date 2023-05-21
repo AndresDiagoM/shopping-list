@@ -1,0 +1,57 @@
+<!--CONTENEDOR DEL CATALOGO DE PRODUCTOS-->
+<div class="catalogo">
+    <h1 class="catalogo-titulo">
+      Catalogo de Productos - Agregados: {{cart.length}}
+      <p class="fecha">Today: {{ today  | date:'short' }}</p> <!-- timeAgo es un PIPE que creamos-->
+    </h1>
+
+    <app-product *ngFor="let p of products" [product]="p" (addedProduct)="addToCart($event)" (showDetailProduct)="onShowDetail($event)"></app-product>
+</div>
+<p class="total">Total  COP: {{total}}$</p>
+
+<!--CONTENEDOR DEL PANEL DE DETALLER DEL PRODUCTO-->
+<div class="product-detail" [ngClass]="{'active':detailState}">
+  <div class="contenido">
+
+    <h1 class="detail-titulo">
+      <p> Detalle del Producto </p>
+      <button class="btn-close" (click)="closeDetail()">X</button>
+    </h1>
+
+    <div class="producto">
+      <!-- <img class="img-producto" [src]="product.image" alt="" width="200"> -->
+      <!-- <app-img *ngFor="let image of productDetail.images" [img]="image"></app-img> -->
+
+      <!-- Slider main container -->
+      <!-- <swiper class="swiper" [slidesPerView]="1">
+        <ng-template swiperSlide *ngFor="let image of productDetail.images">
+          <img class="swiper-image" [src]="image" alt="image">
+        </ng-template>
+      </swiper> -->
+
+      <h2 class="precio-producto text-center">Precio: {{productDetail.price | currency:'COP'}}</h2>
+      <p class="nombre-producto text-center">Nombre: {{productDetail.title}}</p>
+      <p class="descripcion-producto text-center">Descripcion: {{productDetail.description}}</p>
+
+    </div>
+
+    <div class="btn-container">
+      <button class="btn-update" (click)="updateProduct(productDetail)">Actualizar</button>
+      <button class="btn-delete" (click)="deleteProduct(productDetail)">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!--CONTENEDOR DEL PANEL DE CREAR PRODUCTO-->
+<button class="btn-create" (click)="closeCreateProduct()">+</button>
+<div class="create-product" [ngClass]="{'active':createState}">
+  <div class="contenido">
+
+    <h1 class="create-titulo">
+      <p> Crear Producto </p>
+      <button class="btn-close" (click)="closeCreateProduct()">X</button>
+    </h1>
+
+    <!-- <app-new-product (newProductEvent)="onNewProduct($event)"></app-new-product> -->
+  </div>
+</div>

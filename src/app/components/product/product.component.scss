@@ -1,0 +1,52 @@
+.producto{
+    margin: 1em;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 5px #ccc;
+    transition: all 0.3s ease-in-out; // all = todas las propiedades, 0.3s = tiempo de transicion, ease-in-out = aceleracion y desaceleracion
+    cursor: pointer;
+    &:hover{
+        box-shadow: 0 0 10px #4f4f4f;
+    }
+    .img-producto{
+        width: 20em;
+        height: 200px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+    .nombre-producto{
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .precio-producto{
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .boton-producto {
+        background-color: #3cd880;
+        color: #fff;
+        border: 0;
+        padding: 10px;
+        width: 100%;
+        border-radius: 10px;
+        //centrar el boton en el div
+        margin: auto;
+        display: block; //para que el boton se centre
+    }
+    .boton-detail {
+        background-color: #3cd880;
+        color: #fff;
+        border: 0;
+        padding: 10px;
+        width: 100%;
+        border-radius: 10px;
+        //centrar el boton en el div
+        margin: 0.5em auto;
+        display: block; //para que el boton se centre
+    }
+}
