@@ -1,0 +1,48 @@
+<div class="show-mobile">
+  <div>
+    <button (click)="ocultarMenu($event)">
+      <img src="./assets/svg/icon_menu.svg" alt="menu">
+    </button>
+    <a href="">
+      <img src="./assets/images/app-logo.png" alt="logo" width="100">
+    </a>
+    <a href="">
+      <img src="./assets/svg/icon_shopping_cart.svg" alt="logo">
+    </a>
+  </div>
+  <div class="side-menu" [ngClass]="{'active': menuStatus,}">
+    <button class="close-menu" (click)="ocultarMenu($event)">
+      Close
+    </button>
+    <ul>
+      <li><a href="">All</a></li>
+      <li><a href="">Clothes</a></li>
+      <li><a href="">Electronics</a></li>
+    </ul>
+  </div>
+</div>
+
+<!--PARA ESCRITORIO-->
+<div class="hide-mobile">
+  <div>
+    <nav class="left-part">
+      <a class="logo" href="">
+        <img src="./assets/images/app-logo.png" alt="logo" width="100">
+      </a>
+      <ul class="left-part menu">
+        <li><a href="">All</a></li>
+        <li><a href="">Clothes</a></li>
+        <li><a href="">Electronics</a></li>
+      </ul>
+    </nav>
+    <div class="info">
+      <div class="account">andresdiag@unicauca.com</div>
+      <div class="cart">
+        <a href="">
+          <img src="./assets/svg/icon_shopping_cart.svg" alt="logo">
+        </a>
+        <span class="cart-count">{{counter}}</span>
+      </div>
+    </div>
+  </div>
+</div>

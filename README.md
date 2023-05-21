@@ -70,7 +70,11 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
-shopping-list is a simple app with Angular. It uses the [FakeStoreAPI](https://fakestoreapi.com/) to get the products and show them in the menu. You can add products to the cart and see the total price of the products in the list of your products. You can also see the details of the products and add them to the list from there.
+shopping-list is a simple app with Angular. It uses the [FakeStoreAPI](https://fakestoreapi.com/) to get the products and show them in the menu. It also uses an API created for store user and products information [FirebaseAPI](https://shopping-list-c69d4-default-rtdb.firebaseio.com/), it's the dabase of the app. You can add products to the cart and see the total price of the products in the list of your products. You can also see the details of the products and add them to the list from there.
+
+The db-model of the app is the following:
+
+![db-model](src/assets/images/db-model.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
