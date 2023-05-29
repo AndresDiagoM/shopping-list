@@ -38,11 +38,34 @@
     <div class="info">
       <div class="account">andresdiag@unicauca.com</div>
       <div class="cart">
-        <a href="">
-          <img src="./assets/svg/icon_shopping_cart.svg" alt="logo">
+        <a>
+          <img (click)="ocultarLista()" src="./assets/svg/icon_shopping_cart.svg" alt="logo">
         </a>
         <span class="cart-count">{{counter}}</span>
       </div>
     </div>
   </div>
+</div>
+
+<!-- CONTENEDOR DE LISTA DE PRODUCTOS -->
+<div  class="list-container"  [ngClass]="{'active': listState}">
+  <div class="list-header">
+    <h1 class="list-title">Shopping Cart</h1>
+    <button class="close-list" (click)="ocultarLista()">X</button>
+  </div>
+
+  <ul class="product-list">
+    <li *ngFor="let product of cart">
+      <div class="product">
+        <img [src]="product.images[0]" alt="image" width="100">
+        <div class="product-info">
+          <h2 class="product-title">{{product.title}}</h2>
+          <p class="product-price">{{product.price | currency:'COP'}}</p>
+        </div>
+        <div class="product-actions">
+          <button class="btn-delete" (click)="quitarPorducto(product)">Quitar</button>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>

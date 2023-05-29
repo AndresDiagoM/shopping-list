@@ -34,4 +34,9 @@ export class StoreService {
     });
     return this.total;
   }
+  quitarProducto(product: Product) {
+    const index = this.cart.findIndex((prod) => prod.id === product.id);
+    this.cart.splice(index, 1);
+    this.cartBehavior.next(this.cart);
+  }
 }

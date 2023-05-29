@@ -50,7 +50,7 @@ export class ProductsComponent implements  OnInit {
     });
   }
 
-  // --------- METODOS FIRESTORE ----------
+  // --------- METODOS ----------
   addToCart(product: Product) {
     //console.log('product', product);
     this.storeService.addToCart(product);
@@ -64,6 +64,7 @@ export class ProductsComponent implements  OnInit {
   onShowDetail(id: string) {
     if(!this.detailState) {
       this.detailState = true; // mostrar panel de detalle
+      this.createState = false; // ocultar panel de creacion
     }
     this.productsService.getProduct(id).subscribe((product) => {
       this.productDetail = product;
@@ -73,8 +74,10 @@ export class ProductsComponent implements  OnInit {
 
   closeCreateProduct() {
     this.createState = !this.createState;
+    this.detailState = false; // ocultar panel de detalle
   }
 
+  // --------- METODOS FIRESTORE ----------
   async onNewProduct(newProduct: Product | createProductDTO) {
     const response= await this.productsService.createFirestore(newProduct);
     console.log('response', response);
@@ -87,6 +90,7 @@ export class ProductsComponent implements  OnInit {
       this.products = this.products.filter((productFilter) => productFilter.id !== product.id);
     });
   }
+
   updateProduct(product: Product) {
     const dto: createProductDTO = {
       title: product.title,
