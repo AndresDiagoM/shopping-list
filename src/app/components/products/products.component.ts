@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product, createProductDTO } from '../../models/product.model'; //importamos el modelo de datos
+import { Product, createProductDTO, Category } from '../../models/product.model'; //importamos el modelo de datos
 
 import { StoreService } from '../../services/store.service'; //importamos el servicio
 import { ProductsService } from '../../services/products.service';
@@ -31,6 +31,8 @@ export class ProductsComponent implements  OnInit {
     description: ''
   };
   createState = false;
+  limit = 10;
+  offset = 0;
 
   constructor(
     private storeService: StoreService,
@@ -41,29 +43,24 @@ export class ProductsComponent implements  OnInit {
   }
 
   ngOnInit(): void { // Asincrono
-    this.productsService.getProducts().subscribe((productsApi) => {
-      //console.log(productsApi);
-      // formatear los datos de la API
-      for (const key in productsApi) {
-        if (Object.prototype.hasOwnProperty.call(productsApi, key)) {
-          const product = productsApi[key];
-          product.id = key;
-          this.products.push(product);
-        }
-      }
-      //this.products = productsApi;
+    // Con Firestore
+    this.productsService.getPageFirestore(this.offset.toString(),this.limit).subscribe((products) => {
+      //console.log('products', products[0]);
+      this.products = products;
     });
   }
 
-  // --------- METODOS ----------
+  // --------- METODOS FIRESTORE ----------
   addToCart(product: Product) {
     //console.log('product', product);
     this.storeService.addToCart(product);
     this.total = this.storeService.getTotal();
   }
+
   closeDetail() {
     this.detailState = !this.detailState;
   }
+
   onShowDetail(id: string) {
     if(!this.detailState) {
       this.detailState = true; // mostrar panel de detalle
@@ -77,25 +74,20 @@ export class ProductsComponent implements  OnInit {
   closeCreateProduct() {
     this.createState = !this.createState;
   }
+
   async onNewProduct(newProduct: Product | createProductDTO) {
-    // Con API de firebase
-    this.productsService.create(newProduct).subscribe((response) => {
-      console.log('response', response);
-      //this.products.push(product);
-      //the server response with a object, but is not an entire product object
-    });
+    const response= await this.productsService.createFirestore(newProduct);
+    console.log('response', response);
     this.products.push(newProduct as Product);
   }
+
   deleteProduct(product: Product) {
-    // Con API de firebase
-    this.productsService.delete(product).subscribe((response) => {
-      console.log('response', response);
-      const index = this.products.indexOf(product);
-      this.products.splice(index, 1);
+    this.productsService.deleteFirestore(product).then(() => {
+      //console.log('Producto eliminado');
+      this.products = this.products.filter((productFilter) => productFilter.id !== product.id);
     });
   }
   updateProduct(product: Product) {
-    // Con API de firebase
     const dto: createProductDTO = {
       title: product.title,
       price: product.price,
@@ -105,14 +97,28 @@ export class ProductsComponent implements  OnInit {
       description: product.description
     }
     //console.log('dto', product);
-    this.productsService.update(product.id, product).subscribe((response) => {
-      console.log('response', response);
+    this.productsService.updateFirestore(product.id, product).then(() => {
+      //console.log('Producto actualizado');
       this.products = this.products.map((productMap) => { // actualizar la lista de productos
         if(productMap.id === product.id) {
           productMap = product;
         }
         return productMap;
       });
+    });
+  }
+
+  // -- Metodos de paginacion --
+  nextPage() {
+    this.offset += this.limit;
+    this.productsService.getPageFirestore(this.offset.toString(), this.limit).subscribe((products) => {
+      this.products = products;
+    });
+  }
+  prevPage() {
+    this.offset -= this.limit;
+    this.productsService.getPageFirestore(this.offset.toString(), this.limit).subscribe((products) => {
+      this.products = products;
     });
   }
 }

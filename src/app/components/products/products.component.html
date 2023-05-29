@@ -6,6 +6,12 @@
     </h1>
 
     <app-product *ngFor="let p of products" [product]="p" (addedProduct)="addToCart($event)" (showDetailProduct)="onShowDetail($event)"></app-product>
+
+    <!--BOTONES DEL PAGINADOR-->
+    <div class="paginador-container">
+      <button class="btn-paginador" (click)="prevPage()">Anterior</button>
+      <button class="btn-paginador" (click)="nextPage()">Siguiente</button>
+    </div>
 </div>
 <p class="total">Total  COP: {{total}}$</p>
 

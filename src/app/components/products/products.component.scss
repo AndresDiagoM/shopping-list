@@ -32,6 +32,26 @@
   color: #fff;
   font-size: 1.2rem;
 }
+.paginador-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5em 0.5em;
+  width: 100%;
+}
+.paginador-container .btn-paginador {
+  width: 20%;
+  background-color: #3cd880;
+  color: #fff;
+  border: 0;
+  padding: 10px;
+  border-radius: 10px;
+  //centrar el boton en el div
+  margin: 0.5em auto;
+}
+.btn-paginador:hover{
+  transform: scale(1.1);
+}
 .total{
     //ajustar en la parte inferior
     // position: fixed;

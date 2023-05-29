@@ -216,7 +216,7 @@ Project Link: [https://github.com/AndresDiagoM/shopping-list](https://github.com
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/andres-felipe-diago-matta/
-[product-screenshot]: src/assets/images/screenshot.png
+[product-screenshot]: src/assets/images/screenshot2.png
 
 
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
