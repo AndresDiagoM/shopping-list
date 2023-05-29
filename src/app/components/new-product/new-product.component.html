@@ -1,0 +1,47 @@
+<div class="form-create">
+  <form (ngSubmit)="onCreate()" #myForm="ngForm">
+
+    <h3>Registro de Producto</h3>
+
+    <!--product.title-->
+    <div class="input-group">
+      <label for="form-title">Nombre:</label>
+      <input type="text" id="form-title" #productTitle="ngModel"
+        [ngClass]="{'invalid':!productTitle.valid && (productTitle.touched)}"
+        [(ngModel)]="product.title" name="title" required/>
+    </div>
+
+    <!--product.price-->
+    <div class="input-group">
+      <label for="form-price">Price:</label>
+      <input type="text" id="form-price" #productPrice="ngModel"
+        [ngClass]="{'invalid':!productPrice.valid && (productPrice.touched)}"
+        [(ngModel)]="product.price" name="price" required/>
+    </div>
+
+    <!--product.image-->
+    <div class="input-group">
+      <label for="form-image">Image:</label>
+      <input type="text" id="form-image" #productImage="ngModel"
+        [ngClass]="{'invalid':!productImage.valid && (productImage.touched)}"
+        [(ngModel)]="product.image" name="image" required/>
+    </div>
+
+    <p class="form-message" [ngClass]="{
+      'valid': productTitle.valid ,
+      'invalid': !productTitle.valid && (productTitle.touched || productPrice.touched || productImage.touched)
+    }">Complete los campos</p>
+
+    <p class="form-message" [ngClass]="{
+      'success': status ,
+      }">Registro exitoso!</p>
+
+    <button class="form-button" type="submit" [disabled]="!myForm.valid"
+      [ngClass]="{
+        'valid': productTitle.valid && productPrice.valid && productImage.valid,
+        'invalid': !productTitle.valid || !productPrice.valid || !productImage.valid
+      }"
+    >Enviar</button>
+
+  </form>
+</div>

@@ -1,0 +1,91 @@
+.form-create{
+  width: 100%;
+  max-width: 330px;
+  padding: 15px; //padding is the space between the content and the border
+  margin: auto; //margin is the space between the border and the container
+
+  border-radius: 10px;
+  background-color: #b4c3c7;
+
+  //centrar el contenido del div
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2, h3 {
+      margin: 1em 0;
+      color: #ffffff;
+      font-size: 2em;
+  }
+}
+
+.input-group {
+  margin-bottom: 10px;
+
+  input {
+      border-radius: 10px;
+      border: 0;
+      padding: 10px;
+      width: 90%;
+      &:focus {
+          outline: none;
+      }
+      &.invalid {
+          border: 1px solid #dc3545;
+      }
+  }
+  label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffffff;
+  }
+}
+
+.form-message {
+  opacity: 0;
+  &.invalid {
+      background-color: #dc3545;
+      opacity: 1;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      color: #ffffff;
+  }
+  &.valid {
+      opacity: 0;
+      margin-top: 0;
+      padding: 0;
+  }
+  &.success {
+    opacity: 1;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #ffffff;
+    background-color: #75e49f;
+  }
+}
+
+.form-button {
+  background-color: #ffffff;
+  color: #74ac95;
+  border: 0;
+  padding: 10px;
+  width: 70%;
+  border-radius: 10px;
+  //centrar el boton en el div
+  margin: auto;
+  display: block; //para que el boton se centre
+  &.valid {
+      background-color: #ffffff;
+      color: #74ac95;
+  }
+  &.invalid {
+      background-color: #3cd880;
+      color: #ffffff;
+  }
+}
+.form-button:hover {
+  transform: scale(1.1);
+}
