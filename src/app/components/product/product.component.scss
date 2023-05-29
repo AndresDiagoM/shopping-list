@@ -37,6 +37,10 @@
         //centrar el boton en el div
         margin: auto;
         display: block; //para que el boton se centre
+        &:hover{
+          transform: scale(1.1);
+          transition: all 0.3s ease-in-out;
+        }
     }
     .boton-detail {
         background-color: #3cd880;
@@ -48,5 +52,9 @@
         //centrar el boton en el div
         margin: 0.5em auto;
         display: block; //para que el boton se centre
+        &:hover{
+          transform: scale(1.1);
+          transition: all 0.3s ease-in-out;
+        }
     }
 }
