@@ -1,0 +1,60 @@
+<section class="vh-100" style="background-color: #E3950F;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="https://www.cyberark.com/wp-content/uploads/2021/02/Secure-Authentication.svg"
+                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+
+                <form [formGroup]="form" novalidate class="space-y-4" (ngSubmit)="onSubmit()">
+
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                    <span class="h1 fw-bold mb-0">Registro de usuarios</span>
+                  </div>
+
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Registro de Sesión</h5>
+
+                  <div class="form-outline mb-4">
+                    <span style="color:red" *ngIf="this.form.get('email')?.errors?.['required']">
+                      (upss!! El email no puede quedar vacío)
+                    </span>
+                    <span style="color:red" *ngIf="this.form.get('email')?.errors?.['email']">
+                      (upss!! El email no es válido)
+                    </span>
+                    <input type="text" id="form2Example17" class="form-control form-control-lg"
+                    formControlName="email"/>
+                    <label class="form-label" for="form2Example17">Email address</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <span style="color:red" *ngIf="this.form.get('password')?.errors?.['required']">
+                      (upss!! LA contraseña no puede quedar vacía)
+                    </span>
+
+                    <span style="color:red" *ngIf="this.form.get('password')?.errors?.['minlength']">
+                      (upss!! LA contraseña debe tener más de 4 caracteres)
+                    </span>
+                    <input type="password" id="form2Example27" class="form-control form-control-lg"
+                    formControlName="password"/>
+                    <label class="form-label" for="form2Example27">Password</label>
+                  </div>
+
+                    <button class="btn btn-dark btn-lg btn-block" [disabled]="form.invalid" type="submit">Registrase</button>
+                    <a class="px-3" [routerLink]="['/login']">Login</a>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

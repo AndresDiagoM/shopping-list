@@ -1,3 +1,4 @@
+
 <div class="show-mobile">
   <div>
     <button (click)="ocultarMenu($event)">
@@ -36,12 +37,16 @@
       </ul>
     </nav>
     <div class="info">
-      <div class="account">andresdiag@unicauca.com</div>
+      <div class="account">{{email}}</div>
       <div class="cart">
         <a>
           <img (click)="ocultarLista()" src="./assets/svg/icon_shopping_cart.svg" alt="logo">
         </a>
         <span class="cart-count">{{counter}}</span>
+      </div>
+      <div class="cart px-2">
+        <button class="btn btn-danger" (click)="onClick()"><i class="icon ion-md-log"></i> Cerrar Sesión</button>
+
       </div>
     </div>
   </div>
