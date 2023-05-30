@@ -1,42 +1,37 @@
 <!--CONTENEDOR DEL NAV-->
 <app-nav></app-nav>
 
-<table class="table table-hover" id="consulta_susp">
-  <thead class="table-secondary">
-  <tr>
-
-      <!-- <th scope="col">Id</th> -->
-      <th scope="col">#</th>
-      <th scope="col">Nombre lista</th>
-      <th scope="col">Fecha Lista</th>
-      <th scope="col">Acciones</th>
-
-
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let elem of liCompras2; let indice=index">
-        <!-- INDICE DEL ARRAY DE LISTA DE COMPRAS SOLO PARA MOSTRAR -->
-       <td >{{indice + 1}}</td>
-       <!-- INDICE DEL ARRAY DE LISTA DE COMPRAS -->
-       <!-- <td>{{liCompras.indexOf(elem)}}</td> -->
-      <td >{{elem.nombre_lista}}</td>
-      <td >{{elem.fecha_lista}}</td>
-      <td >
-        <div class="d-flex">
-          <div class="px-2"><button class="btn btn-success" [routerLink]="['/tienda']">Agregar Productos</button></div>
-          <div class="px-2"><a class="btn btn-warning" (click)="actualizarLista(liCompras.indexOf(elem), elem)">Editar</a></div>
-          <div class="px-2"><button class="btn btn-danger" (click)="deleteListaCompra(indice)">Eliminar</button></div>
-        </div>
-      </td>
-
-
-  </tr>
-  </tbody>
-</table>
-
-<!-- BOTON PARA CREAR UNA NUEVA LISTA -->
-<div>
-  <button class="btn btn-primary" (click)="crearLista()">Crear Lista</button>
+<div class="table-container">
+  <table class="table table-hover" id="consulta_susp">
+    <thead class="table-secondary">
+      <tr>
+          <!-- <th scope="col">Id</th> -->
+          <th scope="col">#</th>
+          <th scope="col">Nombre lista</th>
+          <th scope="col">Fecha Lista</th>
+          <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let elem of lista_compras; let indice=index">
+        <td >{{lista_compras.indexOf(elem)}}</td>
+        <td >{{elem.nombre_lista}}</td>
+        <td >{{elem.fecha_lista}}</td>
+        <td >
+          <div class="d-flex">
+            <div class="px-2"><button class="btn btn-success"
+                (click)="agregarProducto(lista_compras.indexOf(elem), elem)">Agregar Productos</button></div>
+            <div class="px-2"><a class="btn btn-warning"
+                (click)="actualizarLista(lista_compras.indexOf(elem), elem)">Editar</a></div>
+            <div class="px-2"><button class="btn btn-danger" (click)="deleteListaCompra(elem)">Eliminar</button></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
+<!-- BOTON PARA CREAR UNA NUEVA LISTA -->
+<div class="btn-container">
+  <button class="btn btn-primary" (click)="crearLista()">Crear Lista</button>
+</div>

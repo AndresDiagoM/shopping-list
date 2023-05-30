@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Product, createProductDTO, Category } from '../../models/product.model'; //importamos el modelo de datos
+import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { StoreService } from '../../services/store.service'; //importamos el servicio
 import { ProductsService } from '../../services/products.service';
+import { ListaComprasService } from 'src/app/services/lista-compras.service';
+import { ListaProductosService } from 'src/app/services/lista-productos.service';
+import { ListaCompras } from 'src/app/models/lista-compras.model';
+import { ListaProductos } from 'src/app/models/lista-producto.model';
+
 
 @Component({
   selector: 'app-products',
@@ -33,10 +40,23 @@ export class ProductsComponent implements  OnInit {
   createState = false;
   limit = 10;
   offset = 0;
+  iduser= "";
+  id_lista_compras= "";
+  lista_producto: ListaProductos = {
+    id: '',
+    idlista_compras: '',
+    idproducto: '',
+    estado: false,
+  }
 
   constructor(
     private storeService: StoreService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private auth: Auth, // para agregar listas de productos a la lista de compras, FIRESTORE
+    private router: Router,
+    private route: ActivatedRoute,
+    private listacomprasservice: ListaComprasService,
+    private listaProductosService: ListaProductosService
   ) {
     this.cart = this.storeService.getCart();
     this.total = this.storeService.getTotal();
@@ -45,8 +65,14 @@ export class ProductsComponent implements  OnInit {
   ngOnInit(): void { // Asincrono
     // Con Firestore
     this.productsService.getPageFirestore(this.offset.toString(),this.limit).subscribe((products) => {
-      //console.log('products', products[0]);
+      //console.log('products', products);
       this.products = products;
+    });
+    this.route.queryParams.subscribe(params => {
+      this.id_lista_compras = params['id'],
+      this.iduser = this.auth.currentUser!.uid,
+      console.log('iduser:', this.iduser, 'id_lista_compras:', params['id']);
+      this.lista_producto.idlista_compras = this.id_lista_compras;
     });
   }
 
@@ -55,6 +81,13 @@ export class ProductsComponent implements  OnInit {
     //console.log('product', product);
     this.storeService.addToCart(product);
     this.total = this.storeService.getTotal();
+
+    // -- Crear una lista_compras en FIRESTORE--
+    this.lista_producto.idproducto = product.id;
+    this.lista_producto.estado = true;
+    this.listaProductosService.createFirestore(this.lista_producto).then((response) => {
+      console.log('response-create-prod-list: ', response.id, 'id_lista_compras: ', this.id_lista_compras);
+    });
   }
 
   closeDetail() {

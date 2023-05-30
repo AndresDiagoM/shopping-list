@@ -61,7 +61,7 @@ export class ProductsService {
     const productRef = collection(this.firestore, 'productos');
     //return collectionData(productRef, { idField: 'id' }) as Observable<Product[]>;
     return collectionData(
-      query(productRef, orderBy('id'), limit(limitN), startAfter(offset))
+      query(productRef, orderBy('id'), limit(limitN), startAfter(offset)),  { idField: 'id' }
     ) as Observable<Product[]>;
   }
 }
