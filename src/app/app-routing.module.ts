@@ -30,8 +30,6 @@ const routes: Routes = [
   {
     path: 'tienda', component: ProductsComponent, ...canActivate(()=> redirectUnauthorizedTo(['/login']))
   },
-
-
 ];
 
 @NgModule({

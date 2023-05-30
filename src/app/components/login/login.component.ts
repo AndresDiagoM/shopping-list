@@ -24,8 +24,6 @@ export class LoginComponent {
     .then(response => {
       console.log(response);
       this.router.navigate(['menu']);
-
-    })
-    .catch(error => console.log(error));
+    }).catch(error => console.log(error));
   }
 }

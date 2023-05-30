@@ -2,37 +2,34 @@
 <app-nav></app-nav>
 <h1 class="fw-bold fs-3 py-3 text-center">{{titulo}} Lista</h1>
 
+<!--CONTENEDOR DE LA TABLA-->
 <div class="card mx-auto">
-
   <div class="card-body justify-content-center align-items-center mx-auto" style="width: 50%;">
       <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Ingrese los datos de la lista</h5>
       </div>
 
-
     <form [formGroup]="form"  (ngSubmit)="createUpdateLista()" class="was-validated">
         <div class="modal-body">
             <div class="form-group">
-               <input type="hidden" [(ngModel)]="lista.nombre_lista" formControlName="auxiliar">
+                <input type="hidden" [(ngModel)]="lista.nombre_lista" formControlName="auxiliar">
                 <label for="nombre_lista">Nombre: </label>
                 <span style="color:red" *ngIf="this.form.get('nombre_lista')?.errors?.['required']">
                   (upss!! nombre no puede ir vacío)
                 </span>
-
                 <input type="text" [(ngModel)]="lista.nombre_lista" formControlName="nombre_lista" class="text_input form-control" required="true" name="nombre_lista" >
             </div>
             <div class="form-group py-2">
                 <label for="fecha_lista" >Fecha de Ingreso</label>
                 <input type="date" [(ngModel)]="lista.fecha_lista" formControlName="fecha_lista" class="form-control" name="fecha_lista" required="true">
             </div>
-
         </div>
-            <div class="modal-footer">
-                   <button type="button" class="btn btn-secondary" (click)="atras()" data-dismiss="modal">Cerrar</button>
-                    <input type="submit" class="btn btn-primary" [disabled]="form.invalid" value="Guardar">
-            </div>
-    </form>
 
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="atras()" data-dismiss="modal">Cerrar</button>
+            <input type="submit" class="btn btn-primary" [disabled]="form.invalid" value="Guardar">
+        </div>
+    </form>
   </div>
 </div>
 

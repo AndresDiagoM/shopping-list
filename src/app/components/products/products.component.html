@@ -7,7 +7,9 @@
       <p class="fecha">Today: {{ today  | date:'short' }}</p> <!-- timeAgo es un PIPE que creamos-->
     </h1>
 
-    <app-product *ngFor="let p of products" [product]="p" (addedProduct)="addToCart($event)" (showDetailProduct)="onShowDetail($event)"></app-product>
+    <app-product *ngFor="let p of products" [product]="p" (addedProduct)="addToCart($event)"
+        (showDetailProduct)="onShowDetail($event)">
+    </app-product>
 
     <!--BOTONES DEL PAGINADOR-->
     <div class="paginador-container">
@@ -17,7 +19,7 @@
 </div>
 <p class="total">Total  COP: {{total}}$</p>
 
-<!--CONTENEDOR DEL PANEL DE DETALLER DEL PRODUCTO-->
+<!--CONTENEDOR DEL PANEL DE DETALLE DEL PRODUCTO-->
 <div class="product-detail" [ngClass]="{'active':detailState}">
   <div class="contenido">
 
