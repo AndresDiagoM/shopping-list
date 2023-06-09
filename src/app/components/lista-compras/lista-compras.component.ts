@@ -3,6 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ListaComprasService } from 'src/app/services/lista-compras.service';
 import { ListaCompras, createListaComprasDTO } from 'src/app/models/lista-compras.model';
+import { StoreService } from 'src/app/services/store.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class ListaComprasComponent {
   constructor(
     private auth: Auth,
     private listacomprasservice: ListaComprasService,
-    private router: Router, private route: ActivatedRoute
+    private router: Router, private route: ActivatedRoute,
+    private storeService: StoreService
   ){
       this.lista_compras = [];
   }
@@ -31,12 +33,13 @@ export class ListaComprasComponent {
     });
     this.listacomprasservice.getFirestore().subscribe(data => {
       this.lista_compras = data;
-      console.log('data:', data);
+      //console.log('data:', data);
       this.iduser = this.auth.currentUser!.uid;
       //filtrar el array por idusuario
       this.lista_compras = this.lista_compras.filter(element => element.idusuario === this.iduser);
       //console.log('lista_compras filtro:', this.lista_compras);
     });
+    this.storeService.vaciarCarrito();
   }
 
   deleteListaCompra(lista: ListaCompras){

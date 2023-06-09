@@ -32,6 +32,7 @@ export class ProductComponent implements OnInit{
   //--------MÉTODOS--------
   addProduct() {
     this.addedProduct.emit(this.product);
+    //console.log(this.product.id);
   }
   showDetail() {
     this.showDetailProduct.emit(this.product.id);

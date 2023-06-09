@@ -13,7 +13,19 @@ import { Observable } from 'rxjs';
 export class ProductsService {
 
   // --------Propiedades--------
-  ApiFirebase = 'https://shopping-list-c69d4-default-rtdb.firebaseio.com';
+  product: Product = {
+    id: '',
+    title: '',
+    price: 0,
+    image: '',
+    images: [],
+    category: {
+      id: '',
+      name: ''
+    },
+    description: ''
+  };
+
 
   // --------CONSTRUCTOR--------
   constructor(
@@ -21,23 +33,6 @@ export class ProductsService {
     private firestore: Firestore
   ) { }
 
-  // --------METODOS Firebase API - Realtime database--------
-  getProducts() {
-    return this.http.get<Product[]>(`${this.ApiFirebase}/productos.json`);
-  }
-  getProduct(id: string) {
-    return this.http.get<Product>(`${this.ApiFirebase}/productos/${id}.json`);
-  }
-  create(product: createProductDTO | Product) {
-    // add product with a post request with incremental
-    return this.http.post<Product>(this.ApiFirebase, product);
-  }
-  delete(product: Product) {
-    return this.http.delete<Product>(`${this.ApiFirebase}/productos/${product.id}${'.json'}`);
-  }
-  update(id: string, dto: updateProductDTO){
-    return this.http.put<Product>(`${this.ApiFirebase}/productos/${id}${'.json'}`, dto);
-  }
 
   // --------MÉTODOS FIRESTORE--------
   createFirestore(product: createProductDTO | Product) {
@@ -48,9 +43,19 @@ export class ProductsService {
     const productRef = collection(this.firestore, 'productos');
     return collectionData(productRef, { idField: 'id' }) as Observable<Product[]>;
   }
-  getFirestoreById(id:string) {
-    const productRef = doc(this.firestore, `productos/${id}`);
-    return getDoc(productRef);
+  async getFirestoreById(id:string) {
+    const productRef = doc(this.firestore, 'productos',  id);
+    //return await getDoc(productRef);
+    const productSnap = await getDoc(productRef);
+    if (productSnap.exists()) {
+      //console.log('Document data:', productSnap.data(), productSnap.id);
+      // replace the document id with the snapshot id
+      this.product = productSnap.data() as Product;
+      this.product.id = productSnap.id;
+      //console.log('this.product.id: ', this.product.id);
+      return this.product as Product;
+    }
+    return this.product;
   }
   deleteFirestore(product: Product) {
     const productRef = doc(this.firestore, `productos/${product.id}`);

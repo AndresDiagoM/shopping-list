@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { Product, createProductDTO, Category } from '../../models/product.model'; //importamos el modelo de datos
 import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { ListaProductos } from 'src/app/models/lista-producto.model';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements  OnInit {
+export class ProductsComponent implements OnInit, OnChanges, OnDestroy  {
 
   // -- Propiedades --
   cart: Product[] = [];
@@ -58,53 +58,64 @@ export class ProductsComponent implements  OnInit {
     private listacomprasservice: ListaComprasService,
     private listaProductosService: ListaProductosService
   ) {
-    this.cart = this.storeService.getCart();
-    this.total = this.storeService.getTotal();
+    this.storeService.cartBehavior$.subscribe((cart) => {
+      this.cart = cart;
+      //console.log('cart', cart);
+    });
   }
 
   ngOnInit(): void { // Asincrono
     // Obtener catalogo de productos, con paginación. Con Firestore
     this.productsService.getPageFirestore(this.offset.toString(),this.limit).subscribe((products) => {
-      //console.log('products', products);
       this.products = products;
     });
     // Obtener id_lista_compras y iduser, para agregar productos a la lista de compras
     this.route.queryParams.subscribe(params => {
       this.id_lista_compras = params['id'],
       this.iduser = this.auth.currentUser!.uid,
-      console.log('iduser:', this.iduser, 'id_lista_compras:', params['id']);
+      //console.log('[app-products] onInit iduser:', this.iduser, 'id_lista_compras:', params['id']);
       this.lista_producto.idlista_compras = this.id_lista_compras;
     });
-    // Consultar lista de productos por idlista_compras
+    // -- Agregar productos seleccionados al carrito --
+    let lista_producto: any[] = [];
     this.listaProductosService.getFirestore().subscribe(data => {
-      //console.log('data:', data);
+      this.storeService.vaciarCarrito();
       //filtrar el array por idlista_compras
-      let lista_producto = data.filter(element => element.idlista_compras === this.id_lista_compras);
+      lista_producto = data.filter(element => element.idlista_compras === this.id_lista_compras);
       //console.log('[app-products]: lista_productos filtro:', lista_producto);
-      // -- Agregar productos a la lista de compras --
       lista_producto.forEach(element => {
-        // buscar en this.products el producto con id=element.idproducto
-        let product = this.products.find(product => product.id === element.idproducto);
-        //console.log('product:', product);
-        if(product) {
-          this.storeService.addToCart(product);
-          this.total = this.storeService.getTotal();
-        }
+        // obtener producto por id en Firestore y agregarlo al carrito
+        this.productsService.getFirestoreById(element.idproducto).then((product) => {
+          if(product) {
+            //console.log('product:', product);
+            this.storeService.addToCart(product);
+          }
+        });
       });
     });
   }
+
+  ngOnChanges() {
+
+  }
+
+  ngOnDestroy() {
+    this.storeService.vaciarCarrito();
+  }
+
 
   // --------- METODOS ----------
   addToCart(product: Product) {
     //console.log('product', product);
     this.storeService.addToCart(product);
     this.total = this.storeService.getTotal();
+    //console.log('total', this.cart.length);
 
     // -- Crear una lista_compras en FIRESTORE--
     this.lista_producto.idproducto = product.id;
     this.lista_producto.estado = true;
     this.listaProductosService.createFirestore(this.lista_producto).then((response) => {
-      console.log('response-create-prod-list: ', response.id, 'id_lista_compras: ', this.id_lista_compras);
+      //console.log('response-create-prod-list: ', response.id, 'id_lista_compras: ', this.id_lista_compras);
     });
   }
 
@@ -117,7 +128,7 @@ export class ProductsComponent implements  OnInit {
       this.detailState = true; // mostrar panel de detalle
       this.createState = false; // ocultar panel de creacion
     }
-    this.productsService.getProduct(id).subscribe((product) => {
+    this.productsService.getFirestoreById(id).then((product) => {
       this.productDetail = product;
       //console.log('product', product);
     });

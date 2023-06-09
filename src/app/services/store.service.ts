@@ -39,4 +39,12 @@ export class StoreService {
     this.cart.splice(index, 1);
     this.cartBehavior.next(this.cart);
   }
+  vaciarCarrito() {
+    this.cart = [];
+    this.cartBehavior.next(this.cart);
+  }
+  setCart(cart: Product[]) {
+    this.cart = cart;
+    this.cartBehavior.next(this.cart);
+  }
 }

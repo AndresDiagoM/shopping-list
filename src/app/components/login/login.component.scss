@@ -1,7 +1,51 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 .img-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 5em 0 0 1em;
-  width: 25em;
+  width: 28em;
+}
+.login-title-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1em;
+  width: 28em;
+}
+.login-icon {
+  font-size: 2em;
+  color: #3f51b5;
+  margin: 0 0.5em 1em 0;
+}
+.login-title {
+  font-size: 2em;
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+
+
+// small screen
+@media only screen and (max-width: 600px) {
+  .login-container {
+    display: block;
+    height: 100%;
+  }
+  .img-container {
+    margin: 0;
+    width: 100%;
+  }
+}
+
+// screen between 600px and 900px
+@media only screen and (min-width: 600px) and (max-width: 900px) {
+  .img-container {
+    margin: 1em;
+    width: 50%;
+  }
 }
