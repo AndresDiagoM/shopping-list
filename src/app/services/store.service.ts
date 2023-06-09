@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../models/product.model';
-import { BehaviorSubject } from 'rxjs';
+import { ListaProductos } from '../models/lista-producto.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Firestore, collection, addDoc, collectionData,
+  doc, deleteDoc, updateDoc, getDoc,
+  limit, orderBy, query, startAfter } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +14,15 @@ export class StoreService {
 
   // --------- PROPIEDADES ---------
   cart: Product[] = [];
+  listaproductos: ListaProductos[] = [];
   total = 0;
   cartBehavior = new BehaviorSubject<Product[]>([]); // es un estado
   cartBehavior$ = this.cartBehavior.asObservable();
 
   // --------- CONSTRUCTOR ---------
-  constructor() { }
+  constructor(
+    private firestore: Firestore
+  ) { }
 
 
   // --------- METODOS ---------
@@ -24,8 +31,11 @@ export class StoreService {
     this.cart.push(product);
     this.cartBehavior.next(this.cart); //notificar a los subscriptores
   }
-  getCart(){
-    return this.cart;
+  // OBTENER TODOS LOS PRODUCTOS
+  getCart(): Observable<ListaProductos[]> {
+    const listaRef = collection(this.firestore, 'lista_producto');
+    return collectionData(listaRef, { idField: 'id' }) as Observable<ListaProductos[]>;
+    //  return this.cart;
   }
   getTotal(){
     this.total = 0;

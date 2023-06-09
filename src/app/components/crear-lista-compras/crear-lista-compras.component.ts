@@ -49,12 +49,21 @@ export class CrearListaComprasComponent {
       });
     }else{
       this.titulo="Crear Nueva";
+      this.lista = {
+        id: '',
+        fecha_lista: '',
+        nombre_lista: '',
+        idusuario: '',
+      }
+
     }
   }
 
   createUpdateLista(){
+
     this.route.queryParams.subscribe(params => {
-      this.idlista = params['id']});
+      this.idlista = params['id']
+      this.lista = params['lista']});
       if(this.lista){ // ACTUALIZAR
         const { nombre_lista, fecha_lista } = this.form.getRawValue();
         this.iduser = this.auth.currentUser!.uid;
@@ -70,9 +79,12 @@ export class CrearListaComprasComponent {
         });
       }else{ //  CREAR NUEVO
           // OBTENER DATOS DEL FORMULARIO
-          const { nombre_lista, fecha_lista } = this.form.getRawValue();
-          // OBTENER EL ID DE USUARIO ACTUAL
           this.iduser = this.auth.currentUser!.uid;
+          const { nombre_lista, fecha_lista } = this.form.getRawValue();
+          console.log("fecha_lista "+fecha_lista);
+          console.log("nombre: "+nombre_lista);
+          // OBTENER EL ID DE USUARIO ACTUAL
+
           // GENERAR LISTA DE COMPRAS A PARTIR DE LA INTERFAZ
           this.lista = {
             fecha_lista: fecha_lista,
@@ -80,6 +92,7 @@ export class CrearListaComprasComponent {
             idusuario: this.iduser,
           }
           // ACCEDIENDO AL SERVICIO PARA CREAR UNA LISTA DE PRODUCTOS
+
           this.listacomprasservice.createFirestore(this.lista).then(list =>
             this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
               this.router.navigate(['/menu']);

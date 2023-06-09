@@ -30,9 +30,11 @@ export class ListaComprasComponent {
       this.idlistCompra = params['id'];
     });
     this.listacomprasservice.getFirestore().subscribe(data => {
+
       this.lista_compras = data;
       this.iduser = this.auth.currentUser!.uid;
       //filtrar el array por idusuario
+
       this.lista_compras = this.lista_compras.filter(element => element.idusuario === this.iduser);
       //console.log('lista_compras filtro:', this.lista_compras);
     });

@@ -8,6 +8,7 @@ import { ListaProductos } from 'src/app/models/lista-producto.model';
 
 import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
   selector: 'app-nav',
@@ -16,11 +17,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class NavComponent {
   cart : Product[] = [];
+  cart1 : Product[] = [];
+  listaproductos: ListaProductos[] = [];
   menuStatus = false;
   counter = 0;
   email: any="";
   listState = false;
   iduser: any="";
+  id_lista_compras= "";
 
   constructor(
     private storeService: StoreService,
@@ -28,15 +32,47 @@ export class NavComponent {
     private router: Router,
     private route: ActivatedRoute,
     private auth: Auth,
-    private listaProductosService: ListaProductosService
+    private listaProductosService: ListaProductosService,
+    private productosService: ProductsService
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+    this.id_lista_compras = params['id'];
+    console.log("consola del nav: "+this.id_lista_compras);
+     });
+
     this.storeService.cartBehavior$.subscribe((cart) => {
       this.counter = cart.length;
       //console.log('cart', cart);
     });
-    this.cart = this.storeService.getCart();
+    //this.cart = this.storeService.getCart(this.id_lista_compras);
+    this.storeService.getCart().subscribe(data => {
+      //this.cart = data;
+      this.listaproductos = data;
+      console.log("Mi productos: "+data);
+      //LISTA DE PRODUCTOS
+      this.listaproductos = this.listaproductos.filter(element => element.idlista_compras === this.id_lista_compras);
+      console.log("lista de productos filtrada: ",this.listaproductos);
+    });
+
+    this.productosService.getFirestore().subscribe(data => { //productos all
+      this.cart1 = data;
+      console.log("prueba",this.listaproductos);
+      this.cart1 = this.cart1.filter(elem => {
+        this.listaproductos.forEach(elem1 => {
+          if(elem.id === elem1.idproducto){
+            this.cart.push(elem);
+
+          }
+        });
+      });
+      this.counter = this.cart.length;
+      console.log("ejemplo ",this.cart);
+      });
+
+      console.log("productos en el carrito: ",this.listaproductos);
+
     this.email = this.auth.currentUser!.email;
     this.iduser = this.auth.currentUser!.uid;
     console.log("[app-nav] email:",this.email, ", iduser:", this.iduser);
@@ -53,7 +89,7 @@ export class NavComponent {
 
   quitarPorducto(product: Product) {
     this.storeService.quitarProducto(product);
-    this.cart = this.storeService.getCart();
+    //this.cart = this.storeService.getCart();
     this.counter = this.cart.length;
 
     // Eliminar de la lista de.deleteFirestorere

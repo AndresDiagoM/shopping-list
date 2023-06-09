@@ -58,7 +58,7 @@ export class ProductsComponent implements  OnInit {
     private listacomprasservice: ListaComprasService,
     private listaProductosService: ListaProductosService
   ) {
-    this.cart = this.storeService.getCart();
+    //this.cart = this.storeService.getCart(this.id_lista_compras);
     this.total = this.storeService.getTotal();
   }
 
@@ -89,6 +89,8 @@ export class ProductsComponent implements  OnInit {
       console.log('response-create-prod-list: ', response.id, 'id_lista_compras: ', this.id_lista_compras);
     });
   }
+
+
 
   closeDetail() {
     this.detailState = !this.detailState;
