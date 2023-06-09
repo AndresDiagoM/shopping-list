@@ -13,7 +13,7 @@ export class UserService {
   }
 
   login({email, password}: any){
-  return signInWithEmailAndPassword(this.auth, email, password);
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   logout(){

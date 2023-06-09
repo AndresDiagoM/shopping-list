@@ -63,16 +63,34 @@ export class ProductsComponent implements  OnInit {
   }
 
   ngOnInit(): void { // Asincrono
-    // Con Firestore
+    // Obtener catalogo de productos, con paginación. Con Firestore
     this.productsService.getPageFirestore(this.offset.toString(),this.limit).subscribe((products) => {
       //console.log('products', products);
       this.products = products;
     });
+    // Obtener id_lista_compras y iduser, para agregar productos a la lista de compras
     this.route.queryParams.subscribe(params => {
       this.id_lista_compras = params['id'],
       this.iduser = this.auth.currentUser!.uid,
       console.log('iduser:', this.iduser, 'id_lista_compras:', params['id']);
       this.lista_producto.idlista_compras = this.id_lista_compras;
+    });
+    // Consultar lista de productos por idlista_compras
+    this.listaProductosService.getFirestore().subscribe(data => {
+      //console.log('data:', data);
+      //filtrar el array por idlista_compras
+      let lista_producto = data.filter(element => element.idlista_compras === this.id_lista_compras);
+      //console.log('[app-products]: lista_productos filtro:', lista_producto);
+      // -- Agregar productos a la lista de compras --
+      lista_producto.forEach(element => {
+        // buscar en this.products el producto con id=element.idproducto
+        let product = this.products.find(product => product.id === element.idproducto);
+        //console.log('product:', product);
+        if(product) {
+          this.storeService.addToCart(product);
+          this.total = this.storeService.getTotal();
+        }
+      });
     });
   }
 
@@ -159,5 +177,3 @@ export class ProductsComponent implements  OnInit {
     });
   }
 }
-
-// se crea un componente con "ng g c components/products"

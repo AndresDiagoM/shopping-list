@@ -14,6 +14,7 @@ export class ListaComprasService {
 
   // --------Propiedades--------
   ApiFirebase = 'https://shopping-list-c69d4-default-rtdb.firebaseio.com';
+  id_lista_compras: string|undefined = "";
 
   // --------CONSTRUCTOR--------
   constructor(
@@ -22,6 +23,14 @@ export class ListaComprasService {
   ) { }
 
   // --------METODOS--------
+
+  setIdListaCompras(id: string|undefined){
+    this.id_lista_compras = id;
+  }
+
+  getIdListaCompras(){
+    return this.id_lista_compras;
+  }
 
   create(listacompras: ListaCompras): Observable<ListaCompras> {
     return this.http.post<ListaCompras>(`${this.ApiFirebase}/lista_compras.json`,listacompras);

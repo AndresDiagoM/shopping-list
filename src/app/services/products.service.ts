@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product, updateProductDTO, createProductDTO } from '../models/product.model';
 import { Firestore, collection, addDoc, collectionData,
-  doc, deleteDoc, updateDoc,
+  doc, deleteDoc, updateDoc, getDoc,
   limit, orderBy, query, startAfter } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -47,6 +47,10 @@ export class ProductsService {
   getFirestore(): Observable<Product[]> {
     const productRef = collection(this.firestore, 'productos');
     return collectionData(productRef, { idField: 'id' }) as Observable<Product[]>;
+  }
+  getFirestoreById(id:string) {
+    const productRef = doc(this.firestore, `productos/${id}`);
+    return getDoc(productRef);
   }
   deleteFirestore(product: Product) {
     const productRef = doc(this.firestore, `productos/${product.id}`);

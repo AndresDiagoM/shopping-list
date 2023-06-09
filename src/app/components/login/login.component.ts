@@ -15,9 +15,11 @@ export class LoginComponent {
     password: ['', [ Validators.required, Validators.minLength(5)]],
   });
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router){}
+    private router: Router
+  ) {}
 
   onSubmit(){
     this.userService.login(this.form.value)

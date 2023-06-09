@@ -51,7 +51,9 @@ export class ListaComprasComponent {
   }
 
   agregarProducto(idlista: any, lista: ListaCompras){
+    this.listacomprasservice.setIdListaCompras(lista.id);
     this.router.navigate(["/tienda"], { queryParams: { id: lista.id, lista: lista }});
+    //console.log("lista:", lista);
   }
 
   actualizarLista(idlista: any, lista: ListaCompras){
