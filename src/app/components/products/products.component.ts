@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { Product, createProductDTO, Category } from '../../models/product.model'; //importamos el modelo de datos
 import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { StoreService } from '../../services/store.service'; //importamos el servicio
 import { ProductsService } from '../../services/products.service';
@@ -48,6 +49,7 @@ export class ProductsComponent implements OnInit, OnChanges, OnDestroy  {
     idproducto: '',
     estado: false,
   }
+  private firestoreSubscription: Subscription;
 
   constructor(
     private storeService: StoreService,
@@ -62,9 +64,11 @@ export class ProductsComponent implements OnInit, OnChanges, OnDestroy  {
       this.cart = cart;
       //console.log('cart', cart);
     });
+    this.firestoreSubscription = new Subscription();
   }
 
   ngOnInit(): void { // Asincrono
+    console.log('[app-products] onInit');
     // Obtener catalogo de productos, con paginación. Con Firestore
     this.productsService.getPageFirestore(this.offset.toString(),this.limit).subscribe((products) => {
       this.products = products;
@@ -78,21 +82,31 @@ export class ProductsComponent implements OnInit, OnChanges, OnDestroy  {
     });
     // -- Agregar productos seleccionados al carrito --
     let lista_producto: any[] = [];
-    this.listaProductosService.getFirestore().subscribe(data => {
+    this.firestoreSubscription = this.listaProductosService.getFirestore().subscribe(data => {
       this.storeService.vaciarCarrito();
       //filtrar el array por idlista_compras
       lista_producto = data.filter(element => element.idlista_compras === this.id_lista_compras);
       //console.log('[app-products]: lista_productos filtro:', lista_producto);
-      lista_producto.forEach(element => {
-        // obtener producto por id en Firestore y agregarlo al carrito
-        this.productsService.getFirestoreById(element.idproducto).then((product) => {
-          if(product) {
+
+      // Crear un array de promesas de obtención de productos
+      const promises = lista_producto.map(element => {
+        return this.productsService.getFirestoreById(element.idproducto);
+      });
+
+      // Esperar a que todas las promesas se resuelvan
+      Promise.all(promises).then(products => {
+        products.forEach(product => {
+          if (product) {
             //console.log('product:', product);
             this.storeService.addToCart(product);
           }
         });
+
+        // Desuscribirte después de que todas las promesas se completen
+        this.firestoreSubscription.unsubscribe();
       });
     });
+
   }
 
   ngOnChanges() {

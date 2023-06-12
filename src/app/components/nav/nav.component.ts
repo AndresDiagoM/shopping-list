@@ -6,6 +6,7 @@ import { ListaProductosService } from 'src/app/services/lista-productos.service'
 import { ListaComprasService } from 'src/app/services/lista-compras.service';
 import { ListaCompras } from 'src/app/models/lista-compras.model';
 import { ListaProductos } from 'src/app/models/lista-producto.model';
+import { Subscription, switchMap, from, concatMap } from 'rxjs';
 
 import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +24,7 @@ export class NavComponent {
   listState = false;
   iduser: any="";
   id_lista_compras: string|undefined="";
+  private firestoreSubscription: Subscription;
 
   constructor(
     private storeService: StoreService,
@@ -38,6 +40,7 @@ export class NavComponent {
       this.cart = cart;
       //console.log('[app-nav] cart length', this.cart.length);
     });
+    this.firestoreSubscription = new Subscription();
   }
 
   ngOnInit(): void {
@@ -56,25 +59,22 @@ export class NavComponent {
   }
 
   quitarPorducto(product: Product) {
-    this.storeService.quitarProducto(product);
-    // this.cart = this.storeService.getCart();
-    // this.counter = this.cart.length;
-
     // Eliminar de la lista de Firestore
     this.id_lista_compras = this.listacomprasservice.getIdListaCompras();
     // consultar lista de productos con el id_lista_compras
-    this.listaProductosService.getFirestore().subscribe(data => {
-      let lista_productos = data;
-      lista_productos = lista_productos.filter(element => element.idlista_compras === this.id_lista_compras);
-      // filtrar el array por idproducto
-      lista_productos = lista_productos.filter(element => element.idproducto === product.id);
-      // eliminar solo un producto de la lista de productos
-      lista_productos.forEach(element => {
-        this.listaProductosService.deleteFirestore(element).then(() => {
-          console.log("Eliminado");
-        });
-      });
+    this.listaProductosService.getFirestore().pipe(
+      switchMap(data => {
+        const lista_productos = data.filter(element => element.idlista_compras === this.id_lista_compras);
+        return from(lista_productos); // Convertir el array en un observable
+      }),
+      concatMap(element => this.listaProductosService.deleteFirestore(element))
+    ).subscribe(() => {
+      console.log("Producto eliminado");
     });
+
+    this.storeService.quitarProducto(product);
+    // this.cart = this.storeService.getCart();
+    // this.counter = this.cart.length;
   }
 
   cerrarSesion(){
