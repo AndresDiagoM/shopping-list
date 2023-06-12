@@ -6,6 +6,7 @@ import { ListaProductosService } from 'src/app/services/lista-productos.service'
 import { ListaComprasService } from 'src/app/services/lista-compras.service';
 import { ListaCompras } from 'src/app/models/lista-compras.model';
 import { ListaProductos } from 'src/app/models/lista-producto.model';
+import { Subscription, switchMap, from, concatMap, take, first } from 'rxjs';
 
 import { Auth,onAuthStateChanged, getAuth} from '@angular/fire/auth';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +24,7 @@ export class NavComponent {
   listState = false;
   iduser: any="";
   id_lista_compras: string|undefined="";
+  private firestoreSubscription: Subscription;
 
   constructor(
     private storeService: StoreService,
@@ -38,6 +40,7 @@ export class NavComponent {
       this.cart = cart;
       //console.log('[app-nav] cart length', this.cart.length);
     });
+    this.firestoreSubscription = new Subscription();
   }
 
   ngOnInit(): void {
@@ -56,10 +59,6 @@ export class NavComponent {
   }
 
   quitarPorducto(product: Product) {
-    this.storeService.quitarProducto(product);
-    // this.cart = this.storeService.getCart();
-    // this.counter = this.cart.length;
-
     // Eliminar de la lista de Firestore
     this.id_lista_compras = this.listacomprasservice.getIdListaCompras();
     // consultar lista de productos con el id_lista_compras
@@ -75,6 +74,10 @@ export class NavComponent {
         });
       });
     });
+
+    this.storeService.quitarProducto(product);
+    // this.cart = this.storeService.getCart();
+    // this.counter = this.cart.length;
   }
 
   cerrarSesion(){

@@ -44,6 +44,7 @@ export class ProductsService {
     return collectionData(productRef, { idField: 'id' }) as Observable<Product[]>;
   }
   async getFirestoreById(id:string) {
+    if(id === '') return this.product;
     const productRef = doc(this.firestore, 'productos',  id);
     //return await getDoc(productRef);
     const productSnap = await getDoc(productRef);

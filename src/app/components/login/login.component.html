@@ -1,12 +1,14 @@
 <div class="login-container">
+  <!--CONTENEDOR DE IMAGEN-->
   <div class="img-container col-md-6 col-lg-5 d-none d-md-block">
     <img src="https://stopfoodwaste.ie/wp-content/uploads/2017/09/shopping-list.jpg"
       alt="login form" class="img-fluid" style="border-radius: 1rem;" />
   </div>
-  <div class="col-md-6 col-lg-7 d-flex align-items-center">
-    <div class="card-body p-4 p-lg-5 text-black">
 
-      <form [formGroup]="form" novalidate class="space-y-4" (ngSubmit)="onSubmit()">
+  <!--CONTENEDOR DE FORMULARIO-->
+  <div class="col-md-6 col-lg-7 d-flex align-items-center">
+    <div class="form-container card-body p-4 p-lg-5 text-black">
+      <form [formGroup]="form" novalidate class="form space-y-4" (ngSubmit)="onSubmit()">
 
         <div class="login-title-container">
           <i class="login-icon fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
@@ -15,8 +17,7 @@
 
         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Inicia Sesión para empezar</h5>
 
-        <div class="form-outline mb-4">
-
+        <div class="form-email-input form-outline mb-4">
           <span style="color:red" *ngIf="this.form.get('email')?.errors?.['required']">
             (upss!! El email no puede quedar vacío)
           </span>
@@ -24,13 +25,11 @@
             (upss!! El email no es válido)
           </span>
 
-          <input type="email" id="form2Example17" class="form-control form-control-lg"
-          formControlName="email" required="true">
-
+          <input type="email" id="form2Example17" class="email-input form-control form-control-lg" formControlName="email" required="true">
           <label class="form-label" for="form2Example17">Email address</label>
         </div>
 
-        <div class="form-outline mb-4">
+        <div class="form-input-password form-outline mb-4">
           <span style="color:red" *ngIf="this.form.get('password')?.errors?.['required']">
             (upss!! LA contraseña no puede quedar vacía)
           </span>
@@ -46,7 +45,6 @@
           <button class="btn btn-dark btn-lg btn-block" [disabled]="form.invalid" type="submit">Login</button>
           <a class="px-3" [routerLink]="['/register']">Registrarse</a>
       </form>
-
     </div>
   </div>
 </div>
